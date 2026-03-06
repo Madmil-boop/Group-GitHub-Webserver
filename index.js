@@ -3,16 +3,19 @@ const fs = require('fs');
 const url = require('url');
 
 http.createServer((req, res) => {
-    let requestUrl = url.parse(req.url, true);
+    let requestUrl = url.parse(req.url).pathname;
 
-    switch (requestUrl.pathname) {
+    switch (requestUrl) {
         case '/':
             res.write(fs.readFileSync('index.html'));
             res.end();
             break;
-        case '/style.css':
-            res.writeHead(200, { 'Content-Type': 'text/css' });
-            res.write(fs.readFileSync('style.css'));
+        case '/home.html':
+            res.write(fs.readFileSync('home.html'));
+            res.end();
+            break;
+        case '/about.html':
+            res.write(fs.readFileSync('about.html'));
             res.end();
             break;
         default:
@@ -20,5 +23,9 @@ http.createServer((req, res) => {
             res.write('404 Not Found');
             res.end();
     }
-}).listen(8080);
+
+
+
+    
+}).listen(3000);
 
