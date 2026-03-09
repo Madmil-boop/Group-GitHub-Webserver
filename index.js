@@ -1,14 +1,22 @@
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
+const counter = require('./module');
 
 http.createServer((req, res) => {
     let requestUrl = url.parse(req.url).pathname;
 
     switch (requestUrl) {
         case '/':
-            res.write(fs.readFileSync('index.html'));
-            res.end();
+            counter.increaseVisits();
+
+            let page = fs.readFileSync('index.html', 'utf8');
+
+            counter.getVisits((count) => {
+                page = page.replace("Page members visited: 0", "Page members visited: " + count);
+                res.write(page);
+                res.end();
+            });
             break;
         case '/home.html':
             res.write(fs.readFileSync('home.html'));

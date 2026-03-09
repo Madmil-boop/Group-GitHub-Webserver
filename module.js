@@ -1,17 +1,22 @@
-const fs = require('node:fs');
+const fs = require('fs');
 
-fs.readFile('input.txt', (err, data) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log(data.toString());
-});
+function getVisits(callback) {
+    fs.readFile('visits.txt', 'utf8', (err, data) => {
+        if (err) {
+            callback(0);
+            return;
+        }
+        callback(parseInt(data));
+    });
+}
 
-fs.writeFile('output.txt', 'Hello, World!', (err) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log('File written successfully.');
-});
+function increaseVisits() {
+    getVisits((count) => {
+        let newCount = count + 1;
+        fs.writeFile('visits.txt', newCount.toString(), (err) => {
+            if (err) console.error(err);
+        });
+    });
+}
+
+module.exports = { getVisits, increaseVisits };
